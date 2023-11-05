@@ -45,12 +45,12 @@ public class CryptoEntity {
 
     @Encrypt(
             strategy = CryptoStrategy.AES,
-            arguments = {"${crypto.des.key}"})
+            arguments = {"${crypto.aes.key}"})
     private String address1;
 
     @Decrypt(
             strategy = CryptoStrategy.AES,
-            arguments = {"${crypto.des.key:1234567890123456}"})
+            arguments = {"${crypto.aes.key:1234567890123456}"})
     private String address2;
 
     @Encrypt(
