@@ -16,7 +16,7 @@
 
 package com.lzhpo.crypto;
 
-import com.lzhpo.crypto.resolve.RequestMappingResolver;
+import com.lzhpo.crypto.resolver.RequestMappingResolver;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.context.annotation.Bean;

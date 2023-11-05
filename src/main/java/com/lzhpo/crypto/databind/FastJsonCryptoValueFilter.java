@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto.serializer;
+package com.lzhpo.crypto.databind;
 
 import com.alibaba.fastjson.serializer.BeanContext;
 import com.alibaba.fastjson.serializer.ContextValueFilter;

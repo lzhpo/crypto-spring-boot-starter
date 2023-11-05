@@ -18,8 +18,6 @@ package com.lzhpo.crypto.util;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import java.lang.annotation.Annotation;
-import java.util.Objects;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanExpressionContext;
@@ -29,6 +27,9 @@ import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
 import org.springframework.web.method.annotation.ExpressionValueMethodArgumentResolver;
+
+import java.lang.annotation.Annotation;
+import java.util.Objects;
 
 /**
  * @author lzhpo
@@ -54,19 +55,15 @@ public class CryptoUtils {
             return value;
         }
 
-        log.debug("The {} is embedded value.", value);
         ConfigurableListableBeanFactory beanFactory = SpringUtil.getConfigurableBeanFactory();
         String placeholdersResolved = beanFactory.resolveEmbeddedValue(value);
         BeanExpressionResolver exprResolver = beanFactory.getBeanExpressionResolver();
         if (Objects.isNull(exprResolver)) {
-            log.debug("Not found beanExpressionResolver in beanFactory.");
             return value;
         }
 
         BeanExpressionContext expressionContext = new BeanExpressionContext(beanFactory, new RequestScope());
-        Object result = exprResolver.evaluate(placeholdersResolved, expressionContext);
-        log.debug("Resolved {} to {}", value, result);
-        return result;
+        return exprResolver.evaluate(placeholdersResolved, expressionContext);
     }
 
     /**

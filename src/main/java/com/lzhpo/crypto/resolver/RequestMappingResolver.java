@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto.resolve;
+package com.lzhpo.crypto.resolver;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;
