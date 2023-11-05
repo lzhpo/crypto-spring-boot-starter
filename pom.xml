@@ -16,14 +16,14 @@
     <artifactId>crypto-spring-boot-starter</artifactId>
     <version>${revision}</version>
     <name>${artifactId}</name>
-    <url>https://github.com/lzhpo/sensitive-spring-boot-starter</url>
+    <url>https://github.com/lzhpo/${artifactId}</url>
     <description>${artifactId}</description>
 
     <scm>
         <tag>master</tag>
-        <connection>https://github.com/lzhpo/sensitive-spring-boot-starter</connection>
+        <connection>https://github.com/lzhpo/${artifactId}</connection>
         <developerConnection>http://www.lzhpo.com</developerConnection>
-        <url>https://github.com/lzhpo/sensitive-spring-boot-starter.git</url>
+        <url>https://github.com/lzhpo/${artifactId}.git</url>
     </scm>
 
     <licenses>
