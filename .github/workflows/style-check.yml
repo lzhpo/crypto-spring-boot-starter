@@ -1,0 +1,24 @@
+name: Style check
+
+on:
+  push:
+    branches: [ springboot3 ]
+  pull_request:
+    branches: [ springboot3 ]
+
+jobs:
+  compile:
+    runs-on: ubuntu-latest
+    name: Style check jobs
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Execute style check
+        run: mvn spotless:check
