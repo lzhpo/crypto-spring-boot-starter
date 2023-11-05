@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.cryptosensitive.core.resolve;
+package com.lzhpo.crypto.resolve;
 
 import org.springframework.web.method.HandlerMethod;
 

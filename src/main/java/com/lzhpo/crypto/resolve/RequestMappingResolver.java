@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.cryptosensitive.core.resolve;
+package com.lzhpo.crypto.resolve;
 
 import jakarta.servlet.http.HttpServletRequest;
 import java.util.Optional;

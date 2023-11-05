@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.cryptosensitive.core.util;
+package com.lzhpo.crypto.util;
 
 import cn.hutool.core.annotation.AnnotationUtil;
 import java.lang.annotation.Annotation;
