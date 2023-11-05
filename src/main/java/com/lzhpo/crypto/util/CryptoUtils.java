@@ -16,7 +16,9 @@
 
 package com.lzhpo.crypto.util;
 
+import cn.hutool.core.annotation.AnnotationUtil;
 import cn.hutool.extra.spring.SpringUtil;
+import java.lang.annotation.Annotation;
 import java.util.Objects;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -24,6 +26,7 @@ import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.web.context.request.RequestScope;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
 import org.springframework.web.method.annotation.ExpressionValueMethodArgumentResolver;
 
@@ -64,5 +67,23 @@ public class CryptoUtils {
         Object result = exprResolver.evaluate(placeholdersResolved, expressionContext);
         log.debug("Resolved {} to {}", value, result);
         return result;
+    }
+
+    /**
+     * According to {@code annotationType}, get the annotation from {@code handlerMethod}
+     *
+     * @param handlerMethod {@link HandlerMethod}
+     * @param annotationType annotationType
+     * @return {@link Annotation}
+     */
+    public static <T extends Annotation> T getAnnotation(HandlerMethod handlerMethod, Class<T> annotationType) {
+        Class<?> beanType = handlerMethod.getBeanType();
+        // First get the annotation from the class of the method
+        T annotation = AnnotationUtil.getAnnotation(beanType, annotationType);
+        if (Objects.isNull(annotation)) {
+            // If not get the annotation from this class, will get it from the current method
+            annotation = handlerMethod.getMethodAnnotation(annotationType);
+        }
+        return annotation;
     }
 }

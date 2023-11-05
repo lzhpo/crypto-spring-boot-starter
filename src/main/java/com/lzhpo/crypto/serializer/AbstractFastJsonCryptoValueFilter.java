@@ -24,7 +24,6 @@ import com.lzhpo.crypto.annocation.Decrypt;
 import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolve.HandlerMethodResolver;
-import com.lzhpo.crypto.util.AnnotationUtils;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -53,7 +52,7 @@ public abstract class AbstractFastJsonCryptoValueFilter {
 
         Class<?> objectClass = object.getClass();
         Field field = ReflectUtil.getField(objectClass, fieldName);
-        IgnoreCrypto ignCrypto = AnnotationUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
+        IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         String[] ignFieldNames = ignCryptoOpt.map(IgnoreCrypto::value).orElse(new String[0]);
         if (ignCryptoOpt.isPresent() && ignCryptoOpt.map(IgnoreCrypto::value).isEmpty()) {

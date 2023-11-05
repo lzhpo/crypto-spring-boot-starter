@@ -30,18 +30,25 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @Slf4j
 @RestController
-@RequestMapping("/")
+@RequestMapping("/crypto")
 public class CryptoEntityController {
 
-    @PostMapping("/single-crypto")
+    @PostMapping("/single")
     public ResponseEntity<CryptoEntity> singleCrypto(@RequestBody CryptoEntity cryptoEntity) {
         log.debug("cryptoEntity: {}", cryptoEntity);
         return ResponseEntity.ok(cryptoEntity);
     }
 
     @IgnoreCrypto
-    @PostMapping("/ignore-crypto")
+    @PostMapping("/ignore")
     public ResponseEntity<CryptoEntity> ignoreCrypto(@RequestBody CryptoEntity cryptoEntity) {
+        log.debug("cryptoEntity: {}", cryptoEntity);
+        return ResponseEntity.ok(cryptoEntity);
+    }
+
+    @PostMapping("/ignore-fields")
+    @IgnoreCrypto({"name1", "name2", "mobilePhone1", "mobilePhone2", "description1", "description2"})
+    public ResponseEntity<CryptoEntity> ignoreFieldsCrypto(@RequestBody CryptoEntity cryptoEntity) {
         log.debug("cryptoEntity: {}", cryptoEntity);
         return ResponseEntity.ok(cryptoEntity);
     }

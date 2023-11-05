@@ -26,7 +26,6 @@ import com.lzhpo.crypto.CryptoWrapper;
 import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolve.HandlerMethodResolver;
-import com.lzhpo.crypto.util.AnnotationUtils;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -66,7 +65,7 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
 
         String fieldName = gen.getOutputContext().getCurrentName();
         Object object = gen.getCurrentValue();
-        IgnoreCrypto ignCrypto = AnnotationUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
+        IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         String[] ignFieldNames = ignCryptoOpt.map(IgnoreCrypto::value).orElse(new String[0]);
         if (ignCryptoOpt.isEmpty() || ignCryptoOpt.map(IgnoreCrypto::value).isPresent()) {
