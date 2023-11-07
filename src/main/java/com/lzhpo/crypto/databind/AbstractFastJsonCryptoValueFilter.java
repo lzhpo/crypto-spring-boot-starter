@@ -25,14 +25,13 @@ import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
 import com.lzhpo.crypto.util.CryptoUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
-
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.method.HandlerMethod;
 
 /**
  * Common method of {@code ContextValueFilter} for fastjson1 and fastjson2.

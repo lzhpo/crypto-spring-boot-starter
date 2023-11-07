@@ -10,9 +10,9 @@
 
 ## 如何使用？
 
-*crypto-spring-boot-starter 也支持 SpringBoot3*
+*crypto-spring-boot-starter也支持SpringBoot3*
 
-> 3.0.0 及以上版本的 crypto-spring-boot-starter 只针对使用 SpringBoot3 用户，SpringBoot2 用户请使用低于 3.0.0 版本的 crypto-spring-boot-starter，两者功能不受影响，均会同步更新！
+> 3.0.0及以上版本的crypto-spring-boot-starter只针对使用SpringBoot3用户，SpringBoot2用户请使用低于3.0.0版本的crypto-spring-boot-starter，两者功能不受影响，均会同步更新！
 
 ### 1.导入依赖
 
