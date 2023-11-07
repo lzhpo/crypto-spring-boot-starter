@@ -72,6 +72,7 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {
             gen.writeString(fieldValue);
+            log.debug("Skip encrypt for {}, because @IgnoreCrypto is null or not contains {}", fieldName, fieldName);
             return;
         }
 
@@ -80,11 +81,9 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         Field field = ReflectUtil.getField(objectClass, fieldName);
         Encrypt encrypt = field.getAnnotation(Encrypt.class);
         if (Objects.nonNull(encrypt)) {
-            String[] arguments = encrypt.arguments();
-            for (int i = 0; i < arguments.length; i++) {
-                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-            }
+            String[] arguments = CryptoUtils.resolveArguments(encrypt.arguments());
             CryptoStrategy strategy = encrypt.strategy();
+            log.debug("Encrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             fieldValue = strategy.encrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }
 

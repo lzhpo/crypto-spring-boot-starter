@@ -25,13 +25,14 @@ import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
 import com.lzhpo.crypto.util.CryptoUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.method.HandlerMethod;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
 
 /**
  * Common method of {@code ContextValueFilter} for fastjson1 and fastjson2.
@@ -57,6 +58,7 @@ public abstract class AbstractFastJsonCryptoValueFilter {
                 || ignFieldNamesOpt
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {
+            log.debug("Skip encrypt or decrypt for {}, because @IgnoreCrypto is null or not contains it.", fieldName);
             return fieldValue;
         }
 
@@ -65,21 +67,17 @@ public abstract class AbstractFastJsonCryptoValueFilter {
 
         Encrypt encrypt = field.getAnnotation(Encrypt.class);
         if (Objects.nonNull(encrypt)) {
-            String[] arguments = encrypt.arguments();
-            for (int i = 0; i < arguments.length; i++) {
-                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-            }
+            String[] arguments = CryptoUtils.resolveArguments(encrypt.arguments());
             CryptoStrategy strategy = encrypt.strategy();
+            log.debug("Encrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.encrypt(new CryptoWrapper(object, fieldName, (String) fieldValue, arguments));
         }
 
         Decrypt decrypt = field.getAnnotation(Decrypt.class);
         if (Objects.nonNull(decrypt)) {
-            String[] arguments = decrypt.arguments();
-            for (int i = 0; i < arguments.length; i++) {
-                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-            }
+            String[] arguments = CryptoUtils.resolveArguments(decrypt.arguments());
             CryptoStrategy strategy = decrypt.strategy();
+            log.debug("Decrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.decrypt(new CryptoWrapper(object, fieldName, (String) fieldValue, arguments));
         }
 
