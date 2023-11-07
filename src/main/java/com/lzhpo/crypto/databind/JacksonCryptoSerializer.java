@@ -16,6 +16,7 @@
 
 package com.lzhpo.crypto.databind;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
@@ -47,10 +48,10 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         return String.class;
     }
 
+    // spotless:off
     @Override
     public void serialize(String fieldValue, JsonGenerator gen, SerializerProvider serializerProvider)
             throws IOException {
-
         if (Objects.isNull(fieldValue)) {
             gen.writeNull();
             return;
@@ -67,9 +68,10 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.isPresent())
+        if ((ignCryptoOpt.isPresent()
+                        && !ignFieldNamesOpt.filter(ArrayUtil::isNotEmpty).isPresent())
                 || ignFieldNamesOpt
-                        .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
+                        .filter(names -> Arrays.asList(names).contains(fieldName))
                         .isPresent()) {
             gen.writeString(fieldValue);
             log.debug("Skip encrypt for {}, because @IgnoreCrypto is null or not contains {}", fieldName, fieldName);

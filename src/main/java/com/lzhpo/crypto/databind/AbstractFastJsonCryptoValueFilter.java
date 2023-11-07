@@ -16,6 +16,7 @@
 
 package com.lzhpo.crypto.databind;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.lzhpo.crypto.CryptoStrategy;
@@ -41,22 +42,19 @@ import org.springframework.web.method.HandlerMethod;
 @Slf4j
 public abstract class AbstractFastJsonCryptoValueFilter {
 
+    // spotless:off
     protected Object process(Object object, String fieldName, Object fieldValue) {
         HandlerMethodResolver methodResolver = SpringUtil.getBean(HandlerMethodResolver.class);
         HandlerMethod handlerMethod = methodResolver.resolve();
-        if (Objects.isNull(handlerMethod)
-                || ObjectUtils.isEmpty(fieldValue)
+        if (Objects.isNull(handlerMethod) || ObjectUtils.isEmpty(fieldValue)
                 || !String.class.isAssignableFrom(fieldValue.getClass())) {
             return fieldValue;
         }
 
-        Optional<IgnoreCrypto> ignCryptoOpt =
-                Optional.ofNullable(CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class));
+        Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class));
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.isPresent())
-                || ignFieldNamesOpt
-                        .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
-                        .isPresent()) {
+        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.filter(ArrayUtil::isNotEmpty).isPresent())
+                || ignFieldNamesOpt.filter(names -> Arrays.asList(names).contains(fieldName)).isPresent()) {
             log.debug("Skip encrypt or decrypt for {}, because @IgnoreCrypto is null or not contains it.", fieldName);
             return fieldValue;
         }
@@ -82,4 +80,5 @@ public abstract class AbstractFastJsonCryptoValueFilter {
 
         return fieldValue;
     }
+    // spotless:on
 }
