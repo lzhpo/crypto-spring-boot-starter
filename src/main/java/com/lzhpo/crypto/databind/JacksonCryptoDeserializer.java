@@ -16,6 +16,7 @@
 
 package com.lzhpo.crypto.databind;
 
+import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.core.JsonParser;
@@ -47,6 +48,7 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         return String.class;
     }
 
+    // spotless:off
     @Override
     public String deserialize(JsonParser jsonParser, DeserializationContext deserializationContext) throws IOException {
         String fieldValue = jsonParser.getValueAsString();
@@ -64,10 +66,8 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.isEmpty())
-                || ignFieldNamesOpt
-                        .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
-                        .isPresent()) {
+        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.filter(ArrayUtil::isNotEmpty).isEmpty())
+                || ignFieldNamesOpt.filter(names -> Arrays.asList(names).contains(fieldName)).isPresent()) {
             log.debug("Skip decrypt for {}, because @IgnoreCrypto is null or not contains {}", fieldName, fieldName);
             return fieldValue;
         }
@@ -85,4 +85,5 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
 
         return fieldValue;
     }
+    // spotless:on
 }
