@@ -27,14 +27,15 @@ import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
 import com.lzhpo.crypto.util.CryptoUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.method.HandlerMethod;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
 
 /**
  * @author lzhpo
@@ -64,23 +65,28 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         }
 
         String fieldName = gen.getOutputContext().getCurrentName();
-        Object object = gen.getCurrentValue();
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
-        String[] ignFieldNames = ignCryptoOpt.map(IgnoreCrypto::value).orElse(new String[0]);
-        if (ignCryptoOpt.isEmpty() || ignCryptoOpt.map(IgnoreCrypto::value).isPresent()) {
-            Class<?> objectClass = object.getClass();
-            Field field = ReflectUtil.getField(objectClass, fieldName);
-            Encrypt encrypt = field.getAnnotation(Encrypt.class);
+        boolean existIgnFieldName = ignCryptoOpt
+                .map(IgnoreCrypto::value)
+                .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
+                .isPresent();
+        if (existIgnFieldName || ignCryptoOpt.isPresent()) {
+            gen.writeString(fieldValue);
+            return;
+        }
 
-            if (Objects.nonNull(encrypt) && Arrays.stream(ignFieldNames).noneMatch(name -> name.equals(fieldName))) {
-                String[] arguments = encrypt.arguments();
-                for (int i = 0; i < arguments.length; i++) {
-                    arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-                }
-                CryptoStrategy strategy = encrypt.strategy();
-                fieldValue = strategy.encrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
+        Object object = gen.getCurrentValue();
+        Class<?> objectClass = object.getClass();
+        Field field = ReflectUtil.getField(objectClass, fieldName);
+        Encrypt encrypt = field.getAnnotation(Encrypt.class);
+        if (Objects.nonNull(encrypt)) {
+            String[] arguments = encrypt.arguments();
+            for (int i = 0; i < arguments.length; i++) {
+                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
             }
+            CryptoStrategy strategy = encrypt.strategy();
+            fieldValue = strategy.encrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }
 
         gen.writeString(fieldValue);
