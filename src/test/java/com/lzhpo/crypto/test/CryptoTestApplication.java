@@ -16,7 +16,7 @@
 
 package com.lzhpo.crypto.test;
 
-import com.alibaba.fastjson2.support.spring6.http.converter.FastJsonHttpMessageConverter;
+import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
