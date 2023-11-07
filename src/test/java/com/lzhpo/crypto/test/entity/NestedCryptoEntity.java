@@ -39,11 +39,11 @@ public class NestedCryptoEntity {
             arguments = {"${crypto.rsa.private-key}", "${crypto.rsa.public-key}"})
     private String parentName;
 
-    private CryptoEntity sensitiveEntity;
+    private CryptoEntity entity;
 
     private List<CryptoEntity> list;
 
-    private Map<Integer, CryptoEntity> map;
+    private Map<String, CryptoEntity> map;
 
     private CryptoEntity[] array;
 }
