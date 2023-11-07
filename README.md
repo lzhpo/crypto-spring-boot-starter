@@ -33,8 +33,8 @@
 
 ### 2.实体类字段上使用 `@Encrypt` 或 `@Decrypt` 注解配置加密解密策略
 
-1. 支持多种加密解密策略，例如：BASE64、AES、DES、RSA...
-   _`@Encrypt` 或 `@Decrypt` 注解中的 `arguments` 支持从环境变量中读取以及设置默认值，同时也方便了自定义加密解密策略的时候灵活配置。_
+1. 支持多种加密解密策略，例如：BASE64、AES、DES、RSA...<br>
+    `@Encrypt` 或 `@Decrypt` 注解中的 `arguments` 支持从环境变量中读取以及设置默认值，同时也方便了自定义加密解密策略的时候灵活配置。
     ```java
     @Encrypt(strategy = CryptoStrategy.BASE64)
     private String name1;
