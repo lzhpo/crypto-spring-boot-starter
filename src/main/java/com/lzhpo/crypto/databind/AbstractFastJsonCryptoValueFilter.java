@@ -25,13 +25,14 @@ import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
 import com.lzhpo.crypto.util.CryptoUtils;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.method.HandlerMethod;
+
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
 
 /**
  * Common method of {@code ContextValueFilter} for fastjson1 and fastjson2.
@@ -50,17 +51,21 @@ public abstract class AbstractFastJsonCryptoValueFilter {
             return fieldValue;
         }
 
-        Class<?> objectClass = object.getClass();
-        Field field = ReflectUtil.getField(objectClass, fieldName);
-        IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
-        Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
-        String[] ignFieldNames = ignCryptoOpt.map(IgnoreCrypto::value).orElse(new String[0]);
-        if (ignCryptoOpt.isPresent() && ignCryptoOpt.map(IgnoreCrypto::value).isEmpty()) {
+        Optional<IgnoreCrypto> ignCryptoOpt =
+                Optional.ofNullable(CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class));
+        boolean existIgnFieldName = ignCryptoOpt
+                .map(IgnoreCrypto::value)
+                .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
+                .isPresent();
+        if (existIgnFieldName || ignCryptoOpt.isPresent()) {
             return fieldValue;
         }
 
+        Class<?> objectClass = object.getClass();
+        Field field = ReflectUtil.getField(objectClass, fieldName);
+
         Encrypt encrypt = field.getAnnotation(Encrypt.class);
-        if (Objects.nonNull(encrypt) && Arrays.stream(ignFieldNames).noneMatch(name -> name.equals(fieldName))) {
+        if (Objects.nonNull(encrypt)) {
             String[] arguments = encrypt.arguments();
             for (int i = 0; i < arguments.length; i++) {
                 arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
@@ -70,7 +75,7 @@ public abstract class AbstractFastJsonCryptoValueFilter {
         }
 
         Decrypt decrypt = field.getAnnotation(Decrypt.class);
-        if (Objects.nonNull(decrypt) && Arrays.stream(ignFieldNames).noneMatch(name -> name.equals(fieldName))) {
+        if (Objects.nonNull(decrypt)) {
             String[] arguments = decrypt.arguments();
             for (int i = 0; i < arguments.length; i++) {
                 arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);

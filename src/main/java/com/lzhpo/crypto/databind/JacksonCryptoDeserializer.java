@@ -61,23 +61,27 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         }
 
         String fieldName = jsonParser.currentName();
-        Object object = jsonParser.currentValue();
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
-        if (ignCryptoOpt.isEmpty() || ignCryptoOpt.map(IgnoreCrypto::value).isPresent()) {
-            Class<?> objectClass = object.getClass();
-            Field field = ReflectUtil.getField(objectClass, fieldName);
-            Decrypt decrypt = field.getAnnotation(Decrypt.class);
-            String[] ignFieldNames = ignCryptoOpt.map(IgnoreCrypto::value).orElse(new String[0]);
+        boolean existIgnFieldName = ignCryptoOpt
+                .map(IgnoreCrypto::value)
+                .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
+                .isPresent();
+        if (existIgnFieldName || ignCryptoOpt.isPresent()) {
+            return fieldValue;
+        }
 
-            if (Objects.nonNull(decrypt) && Arrays.stream(ignFieldNames).noneMatch(name -> name.equals(fieldName))) {
-                String[] arguments = decrypt.arguments();
-                for (int i = 0; i < arguments.length; i++) {
-                    arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-                }
-                CryptoStrategy strategy = decrypt.strategy();
-                return strategy.decrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
+        Object object = jsonParser.currentValue();
+        Class<?> objectClass = object.getClass();
+        Field field = ReflectUtil.getField(objectClass, fieldName);
+        Decrypt decrypt = field.getAnnotation(Decrypt.class);
+        if (Objects.nonNull(decrypt)) {
+            String[] arguments = decrypt.arguments();
+            for (int i = 0; i < arguments.length; i++) {
+                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
             }
+            CryptoStrategy strategy = decrypt.strategy();
+            return strategy.decrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }
 
         return fieldValue;
