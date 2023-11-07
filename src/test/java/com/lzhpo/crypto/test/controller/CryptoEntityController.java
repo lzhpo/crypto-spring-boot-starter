@@ -61,7 +61,7 @@ public class CryptoEntityController {
     }
 
     @PostMapping("/ignore-fields")
-    @IgnoreCrypto({"name1", "name2", "mobilePhone1", "mobilePhone2", "description1", "description2"})
+    @IgnoreCrypto({"name2", "mobilePhone2", "description2"})
     public ResponseEntity<CryptoEntity> ignoreFieldsCrypto(@RequestBody CryptoEntity cryptoEntity) {
         log.debug("cryptoEntity: {}", cryptoEntity);
         return ResponseEntity.ok(cryptoEntity);

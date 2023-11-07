@@ -67,11 +67,11 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         String fieldName = gen.getOutputContext().getCurrentName();
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
-        boolean existIgnFieldName = ignCryptoOpt
-                .map(IgnoreCrypto::value)
-                .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
-                .isPresent();
-        if (existIgnFieldName || ignCryptoOpt.isPresent()) {
+        Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
+        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.isEmpty())
+                || ignFieldNamesOpt
+                        .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
+                        .isPresent()) {
             gen.writeString(fieldValue);
             return;
         }
