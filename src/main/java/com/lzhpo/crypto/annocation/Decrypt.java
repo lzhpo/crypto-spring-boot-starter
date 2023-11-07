@@ -36,7 +36,18 @@ import java.lang.annotation.*;
 @JsonDeserialize(using = JacksonCryptoDeserializer.class)
 public @interface Decrypt {
 
+    /**
+     * Decrypt strategy.
+     *
+     * @return {@link CryptoStrategy}
+     */
     CryptoStrategy strategy();
 
+    /**
+     * Decrypt use arguments.
+     * <p>Also support inject environment variables, e.g: ${abc}, ${abc:123}
+     *
+     * @return arguments
+     */
     String[] arguments() default {};
 }

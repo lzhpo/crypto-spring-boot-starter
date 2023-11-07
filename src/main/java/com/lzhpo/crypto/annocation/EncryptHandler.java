@@ -28,5 +28,10 @@ import java.lang.annotation.*;
 @Target({ElementType.FIELD, ElementType.ANNOTATION_TYPE})
 public @interface EncryptHandler {
 
+    /**
+     * Implemented {@link CustomizeCryptoHandler} class for encrypt handler.
+     *
+     * @return implemented {@link CustomizeCryptoHandler} class.
+     */
     Class<? extends CustomizeCryptoHandler> value();
 }

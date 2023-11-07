@@ -22,9 +22,10 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.EncryptHandler;
-import java.lang.reflect.Field;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.util.Assert;
+
+import java.lang.reflect.Field;
 
 /**
  * @author lzhpo
@@ -133,7 +134,19 @@ public enum CryptoStrategy {
         }
     };
 
+    /**
+     * Encrypt with {@link CryptoWrapper}.
+     *
+     * @param cryptoWrapper {@link CryptoWrapper}
+     * @return after encrypt field value
+     */
     public abstract String encrypt(CryptoWrapper cryptoWrapper);
 
+    /**
+     * Decrypt with {@link CryptoWrapper}.
+     *
+     * @param cryptoWrapper {@link CryptoWrapper}
+     * @return after decrypt field value
+     */
     public abstract String decrypt(CryptoWrapper cryptoWrapper);
 }

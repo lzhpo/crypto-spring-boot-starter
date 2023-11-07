@@ -25,8 +25,6 @@ import com.lzhpo.crypto.databind.JacksonCryptoSerializer;
 import java.lang.annotation.*;
 
 /**
- * Encrypt output params.
- *
  * @author lzhpo
  */
 @Inherited
@@ -38,7 +36,18 @@ import java.lang.annotation.*;
 @JsonDeserialize(using = JacksonCryptoDeserializer.class)
 public @interface Encrypt {
 
+    /**
+     * Encrypt strategy.
+     *
+     * @return {@link CryptoStrategy}
+     */
     CryptoStrategy strategy();
 
+    /**
+     * Encrypt use arguments.
+     * <p>Also support inject environment variables, e.g: ${abc}, ${abc:123}
+     *
+     * @return arguments
+     */
     String[] arguments() default {};
 }

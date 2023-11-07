@@ -19,7 +19,7 @@ package com.lzhpo.crypto.annocation;
 import java.lang.annotation.*;
 
 /**
- * Ignore {@link Encrypt}.
+ * Ignore {@link Encrypt} or {@link Decrypt}.
  *
  * @author lzhpo
  */
@@ -29,7 +29,7 @@ import java.lang.annotation.*;
 public @interface IgnoreCrypto {
 
     /**
-     * Ignore crypto field names.
+     * Ignore {@link Encrypt} or {@link Decrypt} field names.
      *
      * @return field names
      */
