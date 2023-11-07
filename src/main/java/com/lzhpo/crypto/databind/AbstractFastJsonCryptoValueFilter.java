@@ -53,7 +53,7 @@ public abstract class AbstractFastJsonCryptoValueFilter {
         Optional<IgnoreCrypto> ignCryptoOpt =
                 Optional.ofNullable(CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class));
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.isEmpty())
+        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.isPresent())
                 || ignFieldNamesOpt
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {

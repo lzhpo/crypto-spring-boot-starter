@@ -27,15 +27,14 @@ import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
 import com.lzhpo.crypto.util.CryptoUtils;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.ObjectUtils;
-import org.springframework.web.method.HandlerMethod;
-
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 import java.util.Objects;
 import java.util.Optional;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.util.ObjectUtils;
+import org.springframework.web.method.HandlerMethod;
 
 /**
  * @author lzhpo
@@ -68,7 +67,7 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.isEmpty())
+        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.isPresent())
                 || ignFieldNamesOpt
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {

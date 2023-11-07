@@ -65,7 +65,7 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent() && ignFieldNamesOpt.isEmpty())
+        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.isPresent())
                 || ignFieldNamesOpt
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {
