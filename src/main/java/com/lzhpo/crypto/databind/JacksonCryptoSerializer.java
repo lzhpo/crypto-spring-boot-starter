@@ -50,8 +50,7 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
 
     // spotless:off
     @Override
-    public void serialize(String fieldValue, JsonGenerator gen, SerializerProvider serializerProvider)
-            throws IOException {
+    public void serialize(String fieldValue, JsonGenerator gen, SerializerProvider serializerProvider) throws IOException {
         if (Objects.isNull(fieldValue)) {
             gen.writeNull();
             return;
@@ -68,11 +67,8 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         IgnoreCrypto ignCrypto = CryptoUtils.getAnnotation(handlerMethod, IgnoreCrypto.class);
         Optional<IgnoreCrypto> ignCryptoOpt = Optional.ofNullable(ignCrypto);
         Optional<String[]> ignFieldNamesOpt = ignCryptoOpt.map(IgnoreCrypto::value);
-        if ((ignCryptoOpt.isPresent()
-                        && !ignFieldNamesOpt.filter(ArrayUtil::isNotEmpty).isPresent())
-                || ignFieldNamesOpt
-                        .filter(names -> Arrays.asList(names).contains(fieldName))
-                        .isPresent()) {
+        if ((ignCryptoOpt.isPresent() && !ignFieldNamesOpt.filter(ArrayUtil::isNotEmpty).isPresent())
+                || ignFieldNamesOpt.filter(names -> Arrays.asList(names).contains(fieldName)).isPresent()) {
             gen.writeString(fieldValue);
             log.debug("Skip encrypt for {}, because @IgnoreCrypto is null or not contains {}", fieldName, fieldName);
             return;
@@ -91,4 +87,5 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
 
         gen.writeString(fieldValue);
     }
+    // spotless:on
 }
