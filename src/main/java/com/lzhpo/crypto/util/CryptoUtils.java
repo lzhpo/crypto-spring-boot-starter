@@ -25,6 +25,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanExpressionContext;
 import org.springframework.beans.factory.config.BeanExpressionResolver;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
+import org.springframework.util.ObjectUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.context.request.RequestScope;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.method.annotation.AbstractNamedValueMethodArgumentResolver;
@@ -50,7 +52,7 @@ public class CryptoUtils {
      * @param value value
      */
     public static Object resolveEmbeddedValue(String value) {
-        if (!value.startsWith(EMBEDDED_LEFT) && !value.endsWith(EMBEDDED_RIGHT)) {
+        if (!StringUtils.hasText(value) || (!value.startsWith(EMBEDDED_LEFT) && !value.endsWith(EMBEDDED_RIGHT))) {
             return value;
         }
 
@@ -63,6 +65,23 @@ public class CryptoUtils {
 
         BeanExpressionContext expressionContext = new BeanExpressionContext(beanFactory, new RequestScope());
         return exprResolver.evaluate(placeholdersResolved, expressionContext);
+    }
+
+    /**
+     * Resolve arguments with embedded value.
+     *
+     * @param arguments arguments
+     * @return after resolved arguments
+     */
+    public static String[] resolveArguments(String[] arguments) {
+        if (ObjectUtils.isEmpty(arguments)) {
+            return arguments;
+        }
+
+        for (int i = 0; i < arguments.length; i++) {
+            arguments[i] = (String) resolveEmbeddedValue(arguments[i]);
+        }
+        return arguments;
     }
 
     /**

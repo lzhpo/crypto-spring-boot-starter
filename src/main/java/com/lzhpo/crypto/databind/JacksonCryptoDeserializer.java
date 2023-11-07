@@ -68,6 +68,7 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
                 || ignFieldNamesOpt
                         .filter(ignFieldNames -> Arrays.asList(ignFieldNames).contains(fieldName))
                         .isPresent()) {
+            log.debug("Skip decrypt for {}, because @IgnoreCrypto is null or not contains {}", fieldName, fieldName);
             return fieldValue;
         }
 
@@ -76,11 +77,9 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         Field field = ReflectUtil.getField(objectClass, fieldName);
         Decrypt decrypt = field.getAnnotation(Decrypt.class);
         if (Objects.nonNull(decrypt)) {
-            String[] arguments = decrypt.arguments();
-            for (int i = 0; i < arguments.length; i++) {
-                arguments[i] = (String) CryptoUtils.resolveEmbeddedValue(arguments[i]);
-            }
+            String[] arguments = CryptoUtils.resolveArguments(decrypt.arguments());
             CryptoStrategy strategy = decrypt.strategy();
+            log.debug("Decrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.decrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }
 
