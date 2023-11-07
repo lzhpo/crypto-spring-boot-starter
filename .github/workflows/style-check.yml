@@ -2,9 +2,9 @@ name: Style check
 
 on:
   push:
-    branches: [ springboot3 ]
+    branches: [ master ]
   pull_request:
-    branches: [ springboot3 ]
+    branches: [ master ]
 
 jobs:
   compile:
