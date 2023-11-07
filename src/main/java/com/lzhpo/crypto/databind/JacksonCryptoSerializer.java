@@ -50,9 +50,7 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
 
     // spotless:off
     @Override
-    public void serialize(String fieldValue, JsonGenerator gen, SerializerProvider serializerProvider)
-            throws IOException {
-
+    public void serialize(String fieldValue, JsonGenerator gen, SerializerProvider serializerProvider) throws IOException {
         if (Objects.isNull(fieldValue)) {
             gen.writeNull();
             return;
