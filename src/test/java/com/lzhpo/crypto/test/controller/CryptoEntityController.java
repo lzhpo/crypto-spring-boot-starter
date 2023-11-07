@@ -18,6 +18,8 @@ package com.lzhpo.crypto.test.controller;
 
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.test.entity.CryptoEntity;
+import com.lzhpo.crypto.test.entity.NestedCryptoEntity;
+import com.lzhpo.crypto.test.entity.NoCryptoEntity;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,6 +39,18 @@ public class CryptoEntityController {
     public ResponseEntity<CryptoEntity> singleCrypto(@RequestBody CryptoEntity cryptoEntity) {
         log.debug("cryptoEntity: {}", cryptoEntity);
         return ResponseEntity.ok(cryptoEntity);
+    }
+
+    @PostMapping("/nested")
+    public ResponseEntity<NestedCryptoEntity> nestedCrypto(@RequestBody NestedCryptoEntity nestedCryptoEntity) {
+        log.debug("nestedCryptoEntity: {}", nestedCryptoEntity);
+        return ResponseEntity.ok(nestedCryptoEntity);
+    }
+
+    @PostMapping("/nothing")
+    public ResponseEntity<NoCryptoEntity> noCrypto(@RequestBody NoCryptoEntity noCryptoEntity) {
+        log.debug("noCryptoEntity: {}", noCryptoEntity);
+        return ResponseEntity.ok(noCryptoEntity);
     }
 
     @IgnoreCrypto
