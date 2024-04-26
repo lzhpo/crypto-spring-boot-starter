@@ -16,7 +16,7 @@
 
 package com.lzhpo.crypto.annocation;
 
-import com.lzhpo.crypto.CustomizeCryptoHandler;
+import com.lzhpo.crypto.strategy.CustomizeCryptoHandler;
 import java.lang.annotation.*;
 
 /**

@@ -22,11 +22,10 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.databind.JsonSerializer;
 import com.fasterxml.jackson.databind.SerializerProvider;
-import com.lzhpo.crypto.CryptoStrategy;
-import com.lzhpo.crypto.CryptoWrapper;
 import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -79,8 +78,8 @@ public class JacksonCryptoSerializer extends JsonSerializer<String> {
         Field field = ReflectUtil.getField(objectClass, fieldName);
         Encrypt encrypt = field.getAnnotation(Encrypt.class);
         if (Objects.nonNull(encrypt)) {
-            String[] arguments = CryptoUtils.resolveArguments(encrypt.arguments());
             CryptoStrategy strategy = encrypt.strategy();
+            String[] arguments = CryptoUtils.resolveArguments(strategy, encrypt.arguments());
             log.debug("Encrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             fieldValue = strategy.encrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }

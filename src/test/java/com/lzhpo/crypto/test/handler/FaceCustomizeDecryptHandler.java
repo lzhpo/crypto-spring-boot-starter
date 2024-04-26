@@ -16,8 +16,8 @@
 
 package com.lzhpo.crypto.test.handler;
 
-import com.lzhpo.crypto.CryptoWrapper;
-import com.lzhpo.crypto.CustomizeCryptoHandler;
+import com.lzhpo.crypto.databind.CryptoWrapper;
+import com.lzhpo.crypto.strategy.CustomizeCryptoHandler;
 
 /**
  * @author lzhpo

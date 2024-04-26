@@ -17,9 +17,16 @@
 package com.lzhpo.crypto.util;
 
 import cn.hutool.core.annotation.AnnotationUtil;
+import cn.hutool.crypto.CryptoException;
 import cn.hutool.extra.spring.SpringUtil;
+import com.lzhpo.crypto.CryptoProperties;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import java.lang.annotation.Annotation;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
+import java.util.Optional;
+import java.util.function.Supplier;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.config.BeanExpressionContext;
@@ -41,8 +48,21 @@ import org.springframework.web.method.annotation.ExpressionValueMethodArgumentRe
 @UtilityClass
 public class CryptoUtils {
 
+    // spotless:off
     private static final String EMBEDDED_LEFT = "${";
     private static final String EMBEDDED_RIGHT = "}";
+    private static final Map<CryptoStrategy, Supplier<String[]>> STRATEGY_FUNCTION_MAP = new HashMap<>(CryptoStrategy.values().length);
+
+    static {
+        CryptoProperties cryptoProperties = SpringUtil.getBean(CryptoProperties.class);
+        STRATEGY_FUNCTION_MAP.put(CryptoStrategy.AES, () -> new String[]{cryptoProperties.getAes().getKey()});
+        STRATEGY_FUNCTION_MAP.put(CryptoStrategy.DES, () -> new String[]{cryptoProperties.getDes().getKey()});
+        STRATEGY_FUNCTION_MAP.put(CryptoStrategy.RSA, () -> {
+            CryptoProperties.CryptoRsa cryptoRsa = cryptoProperties.getRsa();
+            return new String[]{cryptoRsa.getPrivateKey(), cryptoRsa.getPublicKey()};
+        });
+    }
+    // spotless:on
 
     /**
      * Resolve embedded value in {@code arguments}.
@@ -85,9 +105,25 @@ public class CryptoUtils {
     }
 
     /**
+     * Resolve arguments with embedded value.
+     *
+     * @param strategy  strategy
+     * @param arguments arguments
+     * @return after resolved arguments
+     */
+    public static String[] resolveArguments(CryptoStrategy strategy, String[] arguments) {
+        if (ObjectUtils.isEmpty(arguments)) {
+            return Optional.ofNullable(STRATEGY_FUNCTION_MAP.get(strategy))
+                    .map(Supplier::get)
+                    .orElse(arguments);
+        }
+        return resolveArguments(arguments);
+    }
+
+    /**
      * According to {@code annotationType}, get the annotation from {@code handlerMethod}
      *
-     * @param handlerMethod {@link HandlerMethod}
+     * @param handlerMethod  {@link HandlerMethod}
      * @param annotationType annotationType
      * @return {@link Annotation}
      */
@@ -100,5 +136,19 @@ public class CryptoUtils {
             annotation = handlerMethod.getMethodAnnotation(annotationType);
         }
         return annotation;
+    }
+
+    /**
+     * Get not blank content.
+     *
+     * @param content the content
+     * @param message the message
+     * @return result
+     */
+    public static String requireNonBlank(String content, String message) {
+        if (!StringUtils.hasText(content)) {
+            throw new CryptoException(message);
+        }
+        return content;
     }
 }

@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 lzhpo
+ * Copyright 2024 lzhpo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto;
+package com.lzhpo.crypto.strategy;
 
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ReflectUtil;
@@ -22,48 +22,47 @@ import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.EncryptHandler;
+import com.lzhpo.crypto.databind.CryptoWrapper;
+import com.lzhpo.crypto.util.CryptoUtils;
 import java.lang.reflect.Field;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.util.Assert;
 
 /**
  * @author lzhpo
  */
 @Slf4j
+// spotless:off
 public enum CryptoStrategy {
+
     AES {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
-            String[] arguments = cryptoWrapper.getArguments();
-            String key = arguments[0];
-            Assert.hasText(key, "AES key cannot be blank.");
-            return SecureUtil.aes(key.getBytes()).encryptHex(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
-            String[] arguments = cryptoWrapper.getArguments();
-            String key = arguments[0];
-            Assert.hasText(key, "AES key cannot be blank.");
-            return SecureUtil.aes(key.getBytes()).decryptStr(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).decryptStr(fieldValue));
         }
     },
 
     DES {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
-            String[] arguments = cryptoWrapper.getArguments();
-            String key = arguments[0];
-            Assert.hasText(key, "DES key cannot be blank.");
-            return SecureUtil.des(key.getBytes()).encryptHex(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
-            String[] arguments = cryptoWrapper.getArguments();
-            String key = arguments[0];
-            Assert.hasText(key, "DES key cannot be blank.");
-            return SecureUtil.des(key.getBytes()).decryptStr(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).decryptStr(fieldValue));
         }
     },
 
@@ -73,13 +72,9 @@ public enum CryptoStrategy {
             String fieldValue = cryptoWrapper.getFieldValue();
             String[] arguments = cryptoWrapper.getArguments();
 
-            String privateKey = arguments[0];
-            Assert.hasText(privateKey, "RSA privateKey cannot be blank.");
-
-            String publicKey = arguments[1];
-            Assert.hasText(publicKey, "RSA publicKey cannot be blank.");
-
-            return SecureUtil.rsa(privateKey, publicKey).encryptHex(fieldValue, KeyType.PublicKey);
+            String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
+            String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).encryptHex(fieldValue, KeyType.PublicKey));
         }
 
         @Override
@@ -87,25 +82,23 @@ public enum CryptoStrategy {
             String fieldValue = cryptoWrapper.getFieldValue();
             String[] arguments = cryptoWrapper.getArguments();
 
-            String privateKey = arguments[0];
-            Assert.hasText(privateKey, "RSA privateKey cannot be blank.");
-
-            String publicKey = arguments[1];
-            Assert.hasText(publicKey, "RSA publicKey cannot be blank.");
-
-            return SecureUtil.rsa(privateKey, publicKey).decryptStr(fieldValue, KeyType.PrivateKey);
+            String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
+            String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
+            return ExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).decryptStr(fieldValue, KeyType.PrivateKey));
         }
     },
 
     BASE64 {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
-            return Base64.encode(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            return ExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.encode(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
-            return Base64.decodeStr(cryptoWrapper.getFieldValue());
+            String fieldValue = cryptoWrapper.getFieldValue();
+            return ExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.decodeStr(fieldValue));
         }
     },
 
@@ -149,3 +142,4 @@ public enum CryptoStrategy {
      */
     public abstract String decrypt(CryptoWrapper cryptoWrapper);
 }
+// spotless:on

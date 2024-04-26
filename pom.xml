@@ -48,11 +48,12 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <maven.gpg.version>3.1.0</maven.gpg.version>
         <maven.source.version>3.3.0</maven.source.version>
-        <maven.javadoc.version>3.5.0</maven.javadoc.version>
+        <maven.javadoc.version>3.6.3</maven.javadoc.version>
         <spotless-plugin.version>2.40.0</spotless-plugin.version>
-        <flatten-maven-plugin>1.5.0</flatten-maven-plugin>
-        <hutool.version>5.8.22</hutool.version>
-        <fastjson.version>2.0.41</fastjson.version>
+        <flatten-maven-plugin>1.6.0</flatten-maven-plugin>
+        <hutool.version>5.8.27</hutool.version>
+        <fastjson.version>2.0.49</fastjson.version>
+        <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
     </properties>
 
     <dependencies>
@@ -95,6 +96,12 @@
             <artifactId>fastjson2-extension-spring6</artifactId>
             <version>${fastjson.version}</version>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
         </dependency>
     </dependencies>
 

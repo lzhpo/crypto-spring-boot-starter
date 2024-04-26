@@ -19,10 +19,11 @@ package com.lzhpo.crypto.annocation;
 import com.fasterxml.jackson.annotation.JacksonAnnotationsInside;
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.lzhpo.crypto.CryptoStrategy;
 import com.lzhpo.crypto.databind.JacksonCryptoDeserializer;
 import com.lzhpo.crypto.databind.JacksonCryptoSerializer;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import java.lang.annotation.*;
+import org.intellij.lang.annotations.Language;
 
 /**
  * @author lzhpo
@@ -49,5 +50,6 @@ public @interface Decrypt {
      *
      * @return arguments
      */
+    @Language("SpEL")
     String[] arguments() default {};
 }

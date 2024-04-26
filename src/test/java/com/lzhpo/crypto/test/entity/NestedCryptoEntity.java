@@ -16,8 +16,8 @@
 
 package com.lzhpo.crypto.test.entity;
 
-import com.lzhpo.crypto.CryptoStrategy;
 import com.lzhpo.crypto.annocation.Encrypt;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import java.util.List;
 import java.util.Map;
 import lombok.AllArgsConstructor;

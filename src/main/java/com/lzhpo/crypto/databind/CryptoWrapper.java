@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 lzhpo
+ * Copyright 2024 lzhpo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto;
+package com.lzhpo.crypto.databind;
 
 import com.lzhpo.crypto.annocation.Encrypt;
 import lombok.AllArgsConstructor;
