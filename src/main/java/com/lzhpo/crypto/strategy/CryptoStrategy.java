@@ -39,14 +39,14 @@ public enum CryptoStrategy {
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
             String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).encryptHex(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
             String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).decryptStr(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).decryptStr(fieldValue));
         }
     },
 
@@ -55,14 +55,14 @@ public enum CryptoStrategy {
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
             String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).encryptHex(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
             String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).decryptStr(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).decryptStr(fieldValue));
         }
     },
 
@@ -74,7 +74,7 @@ public enum CryptoStrategy {
 
             String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
             String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).encryptHex(fieldValue, KeyType.PublicKey));
+            return CryptoExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).encryptHex(fieldValue, KeyType.PublicKey));
         }
 
         @Override
@@ -84,7 +84,7 @@ public enum CryptoStrategy {
 
             String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
             String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
-            return ExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).decryptStr(fieldValue, KeyType.PrivateKey));
+            return CryptoExecutionHandler.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).decryptStr(fieldValue, KeyType.PrivateKey));
         }
     },
 
@@ -92,13 +92,13 @@ public enum CryptoStrategy {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            return ExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.encode(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.encode(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            return ExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.decodeStr(fieldValue));
+            return CryptoExecutionHandler.executeSafely(fieldValue, BASE64, () -> Base64.decodeStr(fieldValue));
         }
     },
 
