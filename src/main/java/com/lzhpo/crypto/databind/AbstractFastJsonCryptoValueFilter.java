@@ -19,12 +19,11 @@ package com.lzhpo.crypto.databind;
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.extra.spring.SpringUtil;
-import com.lzhpo.crypto.CryptoStrategy;
-import com.lzhpo.crypto.CryptoWrapper;
 import com.lzhpo.crypto.annocation.Decrypt;
 import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.lang.reflect.Field;
 import java.util.Arrays;
@@ -64,16 +63,16 @@ public abstract class AbstractFastJsonCryptoValueFilter {
 
         Encrypt encrypt = field.getAnnotation(Encrypt.class);
         if (Objects.nonNull(encrypt)) {
-            String[] arguments = CryptoUtils.resolveArguments(encrypt.arguments());
             CryptoStrategy strategy = encrypt.strategy();
+            String[] arguments = CryptoUtils.resolveArguments(strategy, encrypt.arguments());
             log.debug("Encrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.encrypt(new CryptoWrapper(object, fieldName, (String) fieldValue, arguments));
         }
 
         Decrypt decrypt = field.getAnnotation(Decrypt.class);
         if (Objects.nonNull(decrypt)) {
-            String[] arguments = CryptoUtils.resolveArguments(decrypt.arguments());
             CryptoStrategy strategy = decrypt.strategy();
+            String[] arguments = CryptoUtils.resolveArguments(strategy, decrypt.arguments());
             log.debug("Decrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.decrypt(new CryptoWrapper(object, fieldName, (String) fieldValue, arguments));
         }

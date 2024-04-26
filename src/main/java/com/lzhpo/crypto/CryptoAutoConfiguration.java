@@ -19,6 +19,7 @@ package com.lzhpo.crypto;
 import com.lzhpo.crypto.resolver.RequestMappingResolver;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
@@ -28,6 +29,7 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
  * @author lzhpo
  */
 @Configuration
+@EnableConfigurationProperties(CryptoProperties.class)
 @Import({FastJsonAutoConfiguration.class, FastJson2AutoConfiguration.class})
 public class CryptoAutoConfiguration {
 

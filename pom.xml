@@ -54,6 +54,7 @@
         <flatten-maven-plugin>1.5.0</flatten-maven-plugin>
         <hutool.version>5.8.22</hutool.version>
         <fastjson.version>2.0.42</fastjson.version>
+        <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
     </properties>
 
     <dependencies>
@@ -96,6 +97,12 @@
             <artifactId>fastjson2-extension-spring5</artifactId>
             <version>${fastjson.version}</version>
             <optional>true</optional>
+        </dependency>
+
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>${jetbrains-annotations.version}</version>
         </dependency>
     </dependencies>
 

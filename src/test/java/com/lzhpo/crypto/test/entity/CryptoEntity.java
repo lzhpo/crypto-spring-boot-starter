@@ -16,11 +16,11 @@
 
 package com.lzhpo.crypto.test.entity;
 
-import com.lzhpo.crypto.CryptoStrategy;
 import com.lzhpo.crypto.annocation.Decrypt;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.Encrypt;
 import com.lzhpo.crypto.annocation.EncryptHandler;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import com.lzhpo.crypto.test.handler.FaceCustomizeDecryptHandler;
 import com.lzhpo.crypto.test.handler.FaceCustomizeEncryptHandler;
 import lombok.AllArgsConstructor;

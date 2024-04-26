@@ -22,11 +22,10 @@ import cn.hutool.extra.spring.SpringUtil;
 import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.databind.DeserializationContext;
 import com.fasterxml.jackson.databind.JsonDeserializer;
-import com.lzhpo.crypto.CryptoStrategy;
-import com.lzhpo.crypto.CryptoWrapper;
 import com.lzhpo.crypto.annocation.Decrypt;
 import com.lzhpo.crypto.annocation.IgnoreCrypto;
 import com.lzhpo.crypto.resolver.HandlerMethodResolver;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.io.IOException;
 import java.lang.reflect.Field;
@@ -77,8 +76,8 @@ public class JacksonCryptoDeserializer extends JsonDeserializer<String> {
         Field field = ReflectUtil.getField(objectClass, fieldName);
         Decrypt decrypt = field.getAnnotation(Decrypt.class);
         if (Objects.nonNull(decrypt)) {
-            String[] arguments = CryptoUtils.resolveArguments(decrypt.arguments());
             CryptoStrategy strategy = decrypt.strategy();
+            String[] arguments = CryptoUtils.resolveArguments(strategy, decrypt.arguments());
             log.debug("Decrypt for {} with {} strategy, arguments={}", fieldName, strategy.name(), arguments);
             return strategy.decrypt(new CryptoWrapper(object, fieldName, fieldValue, arguments));
         }
