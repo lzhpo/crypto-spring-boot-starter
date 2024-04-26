@@ -78,6 +78,8 @@
     @Decrypt(strategy = CryptoStrategy.AES, arguments = {"${crypto.aes.key:1234567890123456}"})
     private String address2;
     ```
+   同时，参数支持在 IDEA 中自动高亮显示。
+   ![](docs/images/SpEL-IDEA.png)
 4. 支持在配置文件中单独对加密策略设置不同的加密参数以及回退策略，需要注意的是注解中配置的 `arguments` 优先级大于此处的配置。
     ```yml
     crypto:
