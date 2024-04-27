@@ -1,10 +1,12 @@
-### single - OK
+### crypto single - OK
 POST http://localhost:8080/crypto/single
 Content-Type: application/json
 
 {
   "name1": "Hello, I'm BASE64",
   "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+  "name3": "Hello, I'm China SM4",
+  "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
   "address1": "Hello, I'm AES",
   "address2": "0eb51fcce6c96c4515872d4939cf1c82",
   "address3": "Hello, I'm DES",
@@ -17,15 +19,154 @@ Content-Type: application/json
   "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
 }
 
-### single - ERROR
+### crypto single - ERROR
 POST http://localhost:8080/crypto/single
 Content-Type: application/json
 
 {
-  "name1": "Jack",
-  "name2": "SmFjaw==",
-  "address1": "GZ",
-  "address2": "GZ",
-  "address3": "JX",
-  "address4": "JX"
+  "name1": "Hello, I'm BASE64",
+  "name2": "Hello, I'm BASE64",
+  "name3": "Hello, I'm China SM4",
+  "name4": "Hello, I'm China SM4",
+  "address1": "Hello, I'm AES",
+  "address2": "Hello, I'm AES",
+  "address3": "Hello, I'm DES",
+  "address4": "Hello, I'm DES",
+  "mobilePhone1": "Hello, I'm RSA",
+  "mobilePhone2": "Hello, I'm RSA",
+  "mobilePhone3": "Hello, I'm China SM4",
+  "mobilePhone4": "Hello, I'm China SM4",
+  "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+  "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+}
+
+### crypto nested - OK
+POST http://localhost:8080/crypto/nested
+Content-Type: application/json
+
+{
+  "parentName": "ABC",
+  "entity": {
+    "name1": "Hello, I'm BASE64",
+    "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+    "name3": "Hello, I'm China SM4",
+    "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+    "address1": "Hello, I'm AES",
+    "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+    "address3": "Hello, I'm DES",
+    "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+    "mobilePhone1": "Hello, I'm RSA",
+    "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+    "mobilePhone3": "Hello, I'm China SM4",
+    "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+    "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+    "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+  },
+  "list": [
+    {
+      "name1": "Hello, I'm BASE64",
+      "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+      "name3": "Hello, I'm China SM4",
+      "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "address1": "Hello, I'm AES",
+      "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+      "address3": "Hello, I'm DES",
+      "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+      "mobilePhone1": "Hello, I'm RSA",
+      "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+      "mobilePhone3": "Hello, I'm China SM4",
+      "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+      "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+    }
+  ],
+  "map": {
+    "key1": {
+      "name1": "Hello, I'm BASE64",
+      "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+      "name3": "Hello, I'm China SM4",
+      "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "address1": "Hello, I'm AES",
+      "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+      "address3": "Hello, I'm DES",
+      "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+      "mobilePhone1": "Hello, I'm RSA",
+      "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+      "mobilePhone3": "Hello, I'm China SM4",
+      "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+      "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+    }
+  },
+  "array": [
+    {
+      "name1": "Hello, I'm BASE64",
+      "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+      "name3": "Hello, I'm China SM4",
+      "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "address1": "Hello, I'm AES",
+      "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+      "address3": "Hello, I'm DES",
+      "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+      "mobilePhone1": "Hello, I'm RSA",
+      "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+      "mobilePhone3": "Hello, I'm China SM4",
+      "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+      "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+      "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+    }
+  ]
+}
+
+### crypto nothing - OK
+POST http://localhost:8080/crypto/nothing
+Content-Type: application/json
+
+{
+  "name": "A",
+  "mobilePhone": "B",
+  "address": "C",
+  "email": "D"
+}
+
+### crypto ignore - OK
+POST http://localhost:8080/crypto/ignore
+Content-Type: application/json
+
+{
+  "name1": "Hello, I'm BASE64",
+  "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+  "name3": "Hello, I'm China SM4",
+  "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+  "address1": "Hello, I'm AES",
+  "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+  "address3": "Hello, I'm DES",
+  "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+  "mobilePhone1": "Hello, I'm RSA",
+  "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+  "mobilePhone3": "Hello, I'm China SM4",
+  "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+  "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+  "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
+}
+
+### crypto ignore fields - OK
+POST http://localhost:8080/crypto/ignore-fields
+Content-Type: application/json
+
+{
+  "name1": "Hello, I'm BASE64",
+  "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+  "name3": "Hello, I'm China SM4",
+  "name4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+  "address1": "Hello, I'm AES",
+  "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+  "address3": "Hello, I'm DES",
+  "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+  "mobilePhone1": "Hello, I'm RSA",
+  "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+  "mobilePhone3": "Hello, I'm China SM4",
+  "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+  "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+  "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
 }
