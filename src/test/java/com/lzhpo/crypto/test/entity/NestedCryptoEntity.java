@@ -34,9 +34,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class NestedCryptoEntity {
 
-    @Encrypt(
-            strategy = CryptoStrategy.RSA,
-            arguments = {"${crypto.rsa.private-key}", "${crypto.rsa.public-key}"})
+    @Encrypt(strategy = CryptoStrategy.RSA)
     private String parentName;
 
     private CryptoEntity entity;

@@ -43,6 +43,12 @@ public class CryptoEntity {
     @Decrypt(strategy = CryptoStrategy.BASE64)
     private String name2;
 
+    @Encrypt(strategy = CryptoStrategy.SM4, arguments = "${custom.sm4.key}")
+    private String name3;
+
+    @Decrypt(strategy = CryptoStrategy.SM4, arguments = "${custom.sm.key:1234567812345678}")
+    private String name4;
+
     @Encrypt(strategy = CryptoStrategy.AES)
     private String address1;
 
