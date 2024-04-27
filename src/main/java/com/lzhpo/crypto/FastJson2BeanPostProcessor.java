@@ -20,7 +20,7 @@ import cn.hutool.core.util.ArrayUtil;
 import com.alibaba.fastjson2.filter.Filter;
 import com.alibaba.fastjson2.support.config.FastJsonConfig;
 import com.alibaba.fastjson2.support.spring.http.converter.FastJsonHttpMessageConverter;
-import com.lzhpo.crypto.databind.FastJson2CryptoValueFilter;
+import com.lzhpo.crypto.codec.FastJson2CryptoValueFilter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
