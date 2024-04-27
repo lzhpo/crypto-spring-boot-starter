@@ -23,10 +23,14 @@ jobs:
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
           gpg-passphrase: MAVEN_GPG_PASSPHRASE
 
-      - name: Publish to Apache&GitHub Maven Central
-        run: mvn clean deploy -Prelease-ossrh,release-github
+      - name: Publish to Apache Maven Central
+        run: mvn clean deploy -Prelease-ossrh
         env:
           MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
           MAVEN_CENTRAL_TOKEN: ${{ secrets.OSSRH_TOKEN }}
           MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
+
+      - name: Publish to GitHub Packages Apache Maven
+        run: mvn clean deploy
+        env:
           GITHUB_TOKEN: ${{ github.token }}
