@@ -41,6 +41,7 @@ public class CryptoStrategyExecutor {
         FALLBACK_VALUE_MAP.put(CryptoStrategy.AES, cryptoProperties.getAes().getFallbackValue());
         FALLBACK_VALUE_MAP.put(CryptoStrategy.DES, cryptoProperties.getDes().getFallbackValue());
         FALLBACK_VALUE_MAP.put(CryptoStrategy.RSA, cryptoProperties.getRsa().getFallbackValue());
+        FALLBACK_VALUE_MAP.put(CryptoStrategy.SM4, cryptoProperties.getSm4().getFallbackValue());
     }
 
     /**

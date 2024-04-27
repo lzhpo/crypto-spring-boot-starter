@@ -53,6 +53,12 @@ public class CryptoProperties {
     @NestedConfigurationProperty
     private CryptoRsa rsa = new CryptoRsa();
 
+    /**
+     * SM4 crypto configurations
+     */
+    @NestedConfigurationProperty
+    private CryptoSm4 sm4 = new CryptoSm4();
+
     @Data
     public static class CryptoAes {
         private String key;
@@ -69,6 +75,12 @@ public class CryptoProperties {
     public static class CryptoRsa {
         private String privateKey;
         private String publicKey;
+        private CryptoFallbackValue fallbackValue = NULL_VALUE;
+    }
+
+    @Data
+    public static class CryptoSm4 {
+        private String key;
         private CryptoFallbackValue fallbackValue = NULL_VALUE;
     }
 }
