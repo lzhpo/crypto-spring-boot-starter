@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto.databind;
+package com.lzhpo.crypto.codec;
 
 import cn.hutool.core.util.ArrayUtil;
 import cn.hutool.core.util.ReflectUtil;

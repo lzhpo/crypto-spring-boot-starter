@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 lzhpo
+ * Copyright 2024 lzhpo
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,18 +14,38 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto.databind;
+package com.lzhpo.crypto.codec;
 
-import com.alibaba.fastjson2.filter.BeanContext;
-import com.alibaba.fastjson2.filter.ContextValueFilter;
+import com.lzhpo.crypto.annocation.Encrypt;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
 /**
  * @author lzhpo
  */
-public class FastJson2CryptoValueFilter extends AbstractFastJsonCryptoValueFilter implements ContextValueFilter {
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class CryptoWrapper {
 
-    @Override
-    public Object process(BeanContext context, Object object, String name, Object value) {
-        return process(object, name, value);
-    }
+    /**
+     * Current object.
+     */
+    private Object object;
+
+    /**
+     * Current field name.
+     */
+    private String fieldName;
+
+    /**
+     * Current field value.
+     */
+    private String fieldValue;
+
+    /**
+     * {@link Encrypt#arguments()}, {@link Encrypt#arguments()}
+     */
+    private String[] arguments;
 }

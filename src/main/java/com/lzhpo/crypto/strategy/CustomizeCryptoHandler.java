@@ -16,12 +16,18 @@
 
 package com.lzhpo.crypto.strategy;
 
-import com.lzhpo.crypto.databind.CryptoWrapper;
+import com.lzhpo.crypto.codec.CryptoWrapper;
 
 /**
  * @author lzhpo
  */
 public interface CustomizeCryptoHandler {
 
+    /**
+     * Customize crypto handler.
+     *
+     * @param cryptoWrapper {@link CryptoWrapper}
+     * @return the value
+     */
     String customize(CryptoWrapper cryptoWrapper);
 }
