@@ -55,6 +55,7 @@
         <hutool.version>5.8.22</hutool.version>
         <fastjson.version>2.0.42</fastjson.version>
         <jetbrains-annotations.version>24.1.0</jetbrains-annotations.version>
+        <bouncycastle.version>1.77</bouncycastle.version>
     </properties>
 
     <dependencies>
@@ -103,6 +104,12 @@
             <groupId>org.jetbrains</groupId>
             <artifactId>annotations</artifactId>
             <version>${jetbrains-annotations.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bouncycastle</groupId>
+            <artifactId>bcpkix-jdk18on</artifactId>
+            <version>${bouncycastle.version}</version>
         </dependency>
     </dependencies>
 

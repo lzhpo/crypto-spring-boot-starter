@@ -61,6 +61,7 @@ public class CryptoUtils {
             CryptoProperties.CryptoRsa cryptoRsa = cryptoProperties.getRsa();
             return new String[]{cryptoRsa.getPrivateKey(), cryptoRsa.getPublicKey()};
         });
+        STRATEGY_FUNCTION_MAP.put(CryptoStrategy.SM4, () -> new String[]{cryptoProperties.getSm4().getKey()});
     }
     // spotless:on
 

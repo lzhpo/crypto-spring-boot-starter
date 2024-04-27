@@ -17,6 +17,7 @@
 package com.lzhpo.crypto.test.mock;
 
 import cn.hutool.core.codec.Base64;
+import cn.hutool.core.util.RandomUtil;
 import cn.hutool.crypto.SecureUtil;
 import java.security.KeyPair;
 import org.junit.jupiter.api.Test;
@@ -35,9 +36,19 @@ class TestUtils {
         KeyPair keyPair = SecureUtil.generateKeyPair("RSA");
 
         String privateKey = Base64.encode(keyPair.getPrivate().getEncoded());
-        System.out.println("privateKey: " + privateKey);
+        System.out.println("RSA privateKey: " + privateKey);
 
         String publicKey = Base64.encode(keyPair.getPublic().getEncoded());
-        System.out.println("publicKey: " + publicKey);
+        System.out.println("RSA publicKey: " + publicKey);
+    }
+
+    @Test
+    void generateSm4Key() {
+        // SM4 requires a 128 bit key
+        // 1 byte = 1 bit
+        // 16 bit = 128 bit
+        // so the SM4 min key length is 16
+        String key = RandomUtil.randomString(16);
+        System.out.println("SM4 key: " + key);
     }
 }

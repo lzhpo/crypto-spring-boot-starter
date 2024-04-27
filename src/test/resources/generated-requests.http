@@ -3,16 +3,18 @@ POST http://localhost:8080/crypto/single
 Content-Type: application/json
 
 {
-  "name1": "Jack",
-  "name2": "SmFjaw==",
-  "address1": "GZ",
-  "address2": "53cbeba8efbdda497470cc2b3ee57c1b",
-  "address3": "JX",
-  "address4": "c4f49040b37142e8",
-  "mobilePhone1": "123456",
-  "mobilePhone2": "92e8737eec6e2535a56cf9cf0f89107845b68d383f43f95c17b65d4ab6b1aab37caa070629355b9536549704bcd5fff88af220963c7c141f1b35137c68c765555e0a3d39bcdef5257f7e6d3eb6b618187a595828df8fc58b7d0082c3cd16dbf48347ab469fa57a089ce8aa1111300dbac54ce1e4437b936d3d100efd0e345565",
-  "description1": "I'm coder",
-  "description2": "I'm coder"
+  "name1": "Hello, I'm BASE64",
+  "name2": "SGVsbG8sIEknbSBCQVNFNjQ=",
+  "address1": "Hello, I'm AES",
+  "address2": "0eb51fcce6c96c4515872d4939cf1c82",
+  "address3": "Hello, I'm DES",
+  "address4": "12745ee6febe72ead0b08e0a2e3f1b06",
+  "mobilePhone1": "Hello, I'm RSA",
+  "mobilePhone2": "7dd4920e018b972716975b399c736940c4eca9db2c1d499ef000229d044d6d40a2cd2690b071c501b39c81f66eb37f1fefb26a8cb75914defc332d9b4e4e31e0a5bb3606604664cf9ce76f37024bb509bfe9dea4cab35fa93a73bae3fe81da056d76af44a4340ac014c435ff23596225537044ba130fed73d80be102fd22379e",
+  "mobilePhone3": "Hello, I'm China SM4",
+  "mobilePhone4": "6a408cb889d213b897ca584c55a0ffe45bf8d82e07705ca64bd631620b203a88",
+  "description1": "Hello, I'm China CUSTOMIZE_HANDLER",
+  "description2": "Hello, I'm China CUSTOMIZE_HANDLER"
 }
 
 ### single - ERROR

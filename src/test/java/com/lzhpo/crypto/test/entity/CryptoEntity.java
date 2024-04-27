@@ -73,6 +73,12 @@ public class CryptoEntity {
             arguments = {"${crypto.rsa.private-key}", "${crypto.rsa.public-key}"})
     private String mobilePhone2;
 
+    @Encrypt(strategy = CryptoStrategy.SM4)
+    private String mobilePhone3;
+
+    @Decrypt(strategy = CryptoStrategy.SM4)
+    private String mobilePhone4;
+
     @EncryptHandler(FaceCustomizeEncryptHandler.class)
     @Encrypt(strategy = CryptoStrategy.CUSTOMIZE_HANDLER)
     private String description1;

@@ -19,16 +19,20 @@ package com.lzhpo.crypto.strategy;
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.crypto.SecureUtil;
+import cn.hutool.crypto.SmUtil;
 import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.symmetric.SM4;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.EncryptHandler;
 import com.lzhpo.crypto.databind.CryptoWrapper;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.lang.reflect.Field;
+import java.nio.charset.StandardCharsets;
 import lombok.extern.slf4j.Slf4j;
 
 /**
  * @author lzhpo
+ * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#KeyGenerator">KeyGenerator</a>
  */
 @Slf4j
 // spotless:off
@@ -102,13 +106,37 @@ public enum CryptoStrategy {
         }
     },
 
+    SM4() {
+        @Override
+        public String encrypt(CryptoWrapper cryptoWrapper) {
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "SM4 key cannot be blank.");
+            SM4 sm4 = SmUtil.sm4(key.getBytes(StandardCharsets.UTF_8));
+            return CryptoStrategyExecutor.executeSafely(fieldValue, SM4, () -> sm4.encryptHex(fieldValue));
+        }
+
+        @Override
+        public String decrypt(CryptoWrapper cryptoWrapper) {
+            String fieldValue = cryptoWrapper.getFieldValue();
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "SM4 key cannot be blank.");
+            SM4 sm4 = SmUtil.sm4(key.getBytes(StandardCharsets.UTF_8));
+            return CryptoStrategyExecutor.executeSafely(fieldValue, SM4, () -> sm4.decryptStr(fieldValue));
+        }
+    },
+
     CUSTOMIZE_HANDLER {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldName = cryptoWrapper.getFieldName();
             Object object = cryptoWrapper.getObject();
+
             Field field = ReflectUtil.getField(object.getClass(), fieldName);
             EncryptHandler cryptoHandler = field.getAnnotation(EncryptHandler.class);
+
             Class<? extends CustomizeCryptoHandler> handler = cryptoHandler.value();
             CustomizeCryptoHandler customizeCryptoHandler = ReflectUtil.newInstance(handler);
             return customizeCryptoHandler.customize(cryptoWrapper);
@@ -118,8 +146,10 @@ public enum CryptoStrategy {
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldName = cryptoWrapper.getFieldName();
             Object object = cryptoWrapper.getObject();
+
             Field field = ReflectUtil.getField(object.getClass(), fieldName);
             DecryptHandler decryptHandler = field.getAnnotation(DecryptHandler.class);
+
             Class<? extends CustomizeCryptoHandler> handler = decryptHandler.value();
             CustomizeCryptoHandler customizeCryptoHandler = ReflectUtil.newInstance(handler);
             return customizeCryptoHandler.customize(cryptoWrapper);
