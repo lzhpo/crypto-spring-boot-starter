@@ -29,7 +29,7 @@ import cn.hutool.crypto.symmetric.DES;
 import cn.hutool.crypto.symmetric.SM4;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.EncryptHandler;
-import com.lzhpo.crypto.databind.CryptoWrapper;
+import com.lzhpo.crypto.codec.CryptoWrapper;
 import com.lzhpo.crypto.util.CryptoUtils;
 import java.lang.reflect.Field;
 import java.nio.charset.StandardCharsets;

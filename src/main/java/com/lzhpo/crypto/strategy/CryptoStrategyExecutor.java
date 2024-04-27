@@ -18,8 +18,7 @@ package com.lzhpo.crypto.strategy;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.lzhpo.crypto.CryptoProperties;
-import java.util.Map;
-import java.util.Objects;
+import java.util.Optional;
 import java.util.concurrent.Callable;
 import lombok.experimental.UtilityClass;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +28,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @UtilityClass
+// spotless:off
 public class CryptoStrategyExecutor {
 
     private static final CryptoProperties CRYPTO_PROPERTIES;
@@ -50,12 +50,11 @@ public class CryptoStrategyExecutor {
             return method.call();
         } catch (Exception e) {
             log.error("Execute {} with value[{}] error: {}", strategy, originalValue, e.getMessage(), e);
-            Map<CryptoStrategy, CryptoStrategyConfiguration> configurationMap = CRYPTO_PROPERTIES.getStrategy();
-
-            CryptoFallbackValue fallbackValue = configurationMap.get(strategy).getFallbackValue();
-            return Objects.nonNull(fallbackValue)
-                    ? fallbackValue.getValue(originalValue, e)
-                    : CRYPTO_PROPERTIES.getDefaultFallbackValue();
+            Optional<CryptoFallbackValue> fallbackValue = Optional.ofNullable(CRYPTO_PROPERTIES.getStrategy())
+                    .map(configurationMap -> configurationMap.get(strategy))
+                    .map(CryptoStrategyConfiguration::getFallbackValue);
+            return fallbackValue.isPresent() ? fallbackValue.get().getValue(originalValue, e) : CRYPTO_PROPERTIES.getDefaultFallbackValue();
         }
     }
 }
+// spotless:on

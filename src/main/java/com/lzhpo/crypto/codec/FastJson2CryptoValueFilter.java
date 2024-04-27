@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-package com.lzhpo.crypto.databind;
+package com.lzhpo.crypto.codec;
 
-import com.alibaba.fastjson.serializer.BeanContext;
-import com.alibaba.fastjson.serializer.ContextValueFilter;
+import com.alibaba.fastjson2.filter.BeanContext;
+import com.alibaba.fastjson2.filter.ContextValueFilter;
 
 /**
  * @author lzhpo
  */
-public class FastJsonCryptoValueFilter extends AbstractFastJsonCryptoValueFilter implements ContextValueFilter {
+public class FastJson2CryptoValueFilter extends AbstractFastJsonCryptoValueFilter implements ContextValueFilter {
 
     @Override
     public Object process(BeanContext context, Object object, String name, Object value) {
