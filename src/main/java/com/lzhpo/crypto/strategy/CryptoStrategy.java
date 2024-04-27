@@ -16,11 +16,16 @@
 
 package com.lzhpo.crypto.strategy;
 
+import static cn.hutool.crypto.asymmetric.KeyType.PrivateKey;
+import static cn.hutool.crypto.asymmetric.KeyType.PublicKey;
+
 import cn.hutool.core.codec.Base64;
 import cn.hutool.core.util.ReflectUtil;
 import cn.hutool.crypto.SecureUtil;
 import cn.hutool.crypto.SmUtil;
-import cn.hutool.crypto.asymmetric.KeyType;
+import cn.hutool.crypto.asymmetric.RSA;
+import cn.hutool.crypto.symmetric.AES;
+import cn.hutool.crypto.symmetric.DES;
 import cn.hutool.crypto.symmetric.SM4;
 import com.lzhpo.crypto.annocation.DecryptHandler;
 import com.lzhpo.crypto.annocation.EncryptHandler;
@@ -35,22 +40,26 @@ import lombok.extern.slf4j.Slf4j;
  * @see <a href="https://docs.oracle.com/javase/7/docs/technotes/guides/security/StandardNames.html#KeyGenerator">KeyGenerator</a>
  */
 @Slf4j
-// spotless:off
 public enum CryptoStrategy {
-
     AES {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).encryptHex(fieldValue));
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "AES key cannot be blank.");
+            AES aes = SecureUtil.aes(key.getBytes());
+            return CryptoStrategyExecutor.executeSafely(fieldValue, AES, () -> aes.encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "AES key cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, AES, () -> SecureUtil.aes(key.getBytes()).decryptStr(fieldValue));
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "AES key cannot be blank.");
+            AES aes = SecureUtil.aes(key.getBytes());
+            return CryptoStrategyExecutor.executeSafely(fieldValue, AES, () -> aes.decryptStr(fieldValue));
         }
     },
 
@@ -58,15 +67,21 @@ public enum CryptoStrategy {
         @Override
         public String encrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).encryptHex(fieldValue));
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "DES key cannot be blank.");
+            DES des = SecureUtil.des(key.getBytes());
+            return CryptoStrategyExecutor.executeSafely(fieldValue, DES, () -> des.encryptHex(fieldValue));
         }
 
         @Override
         public String decrypt(CryptoWrapper cryptoWrapper) {
             String fieldValue = cryptoWrapper.getFieldValue();
-            String key = CryptoUtils.requireNonBlank(cryptoWrapper.getArguments()[0], "DES key cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, DES, () -> SecureUtil.des(key.getBytes()).decryptStr(fieldValue));
+            String[] arguments = cryptoWrapper.getArguments();
+
+            String key = CryptoUtils.requireNonBlank(arguments[0], "DES key cannot be blank.");
+            DES des = SecureUtil.des(key.getBytes());
+            return CryptoStrategyExecutor.executeSafely(fieldValue, DES, () -> des.decryptStr(fieldValue));
         }
     },
 
@@ -78,7 +93,8 @@ public enum CryptoStrategy {
 
             String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
             String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).encryptHex(fieldValue, KeyType.PublicKey));
+            RSA rsa = SecureUtil.rsa(privateKey, publicKey);
+            return CryptoStrategyExecutor.executeSafely(fieldValue, RSA, () -> rsa.encryptHex(fieldValue, PublicKey));
         }
 
         @Override
@@ -88,7 +104,8 @@ public enum CryptoStrategy {
 
             String privateKey = CryptoUtils.requireNonBlank(arguments[0], "RSA privateKey cannot be blank.");
             String publicKey = CryptoUtils.requireNonBlank(arguments[1], "RSA publicKey cannot be blank.");
-            return CryptoStrategyExecutor.executeSafely(fieldValue, RSA, () -> SecureUtil.rsa(privateKey, publicKey).decryptStr(fieldValue, KeyType.PrivateKey));
+            RSA rsa = SecureUtil.rsa(privateKey, publicKey);
+            return CryptoStrategyExecutor.executeSafely(fieldValue, RSA, () -> rsa.decryptStr(fieldValue, PrivateKey));
         }
     },
 
@@ -172,4 +189,3 @@ public enum CryptoStrategy {
      */
     public abstract String decrypt(CryptoWrapper cryptoWrapper);
 }
-// spotless:on
