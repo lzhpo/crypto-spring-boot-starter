@@ -28,7 +28,6 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @UtilityClass
-// spotless:off
 public class CryptoStrategyExecutor {
 
     private static final CryptoProperties CRYPTO_PROPERTIES;
@@ -53,8 +52,10 @@ public class CryptoStrategyExecutor {
             Optional<CryptoFallbackValue> fallbackValue = Optional.ofNullable(CRYPTO_PROPERTIES.getStrategy())
                     .map(configurationMap -> configurationMap.get(strategy))
                     .map(CryptoStrategyConfiguration::getFallbackValue);
-            return fallbackValue.isPresent() ? fallbackValue.get().getValue(originalValue, e) : CRYPTO_PROPERTIES.getDefaultFallbackValue();
+
+            return fallbackValue.isPresent()
+                    ? fallbackValue.get().getValue(originalValue, e)
+                    : CRYPTO_PROPERTIES.getDefaultFallbackValue();
         }
     }
 }
-// spotless:on
