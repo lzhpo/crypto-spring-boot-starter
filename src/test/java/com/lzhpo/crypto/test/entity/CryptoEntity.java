@@ -43,34 +43,22 @@ public class CryptoEntity {
     @Decrypt(strategy = CryptoStrategy.BASE64)
     private String name2;
 
-    @Encrypt(
-            strategy = CryptoStrategy.AES,
-            arguments = {"${crypto.aes.key}"})
+    @Encrypt(strategy = CryptoStrategy.AES)
     private String address1;
 
-    @Decrypt(
-            strategy = CryptoStrategy.AES,
-            arguments = {"${crypto.aes.key:1234567890123456}"})
+    @Decrypt(strategy = CryptoStrategy.AES)
     private String address2;
 
-    @Encrypt(
-            strategy = CryptoStrategy.DES,
-            arguments = {"${crypto.des.key}"})
+    @Encrypt(strategy = CryptoStrategy.DES)
     private String address3;
 
-    @Decrypt(
-            strategy = CryptoStrategy.DES,
-            arguments = {"${crypto.des.key:12345678}"})
+    @Decrypt(strategy = CryptoStrategy.DES)
     private String address4;
 
-    @Encrypt(
-            strategy = CryptoStrategy.RSA,
-            arguments = {"${crypto.rsa.private-key}", "${crypto.rsa.public-key}"})
+    @Encrypt(strategy = CryptoStrategy.RSA)
     private String mobilePhone1;
 
-    @Decrypt(
-            strategy = CryptoStrategy.RSA,
-            arguments = {"${crypto.rsa.private-key}", "${crypto.rsa.public-key}"})
+    @Decrypt(strategy = CryptoStrategy.RSA)
     private String mobilePhone2;
 
     @Encrypt(strategy = CryptoStrategy.SM4)

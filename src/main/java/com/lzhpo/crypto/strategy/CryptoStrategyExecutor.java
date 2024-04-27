@@ -18,7 +18,6 @@ package com.lzhpo.crypto.strategy;
 
 import cn.hutool.extra.spring.SpringUtil;
 import com.lzhpo.crypto.CryptoProperties;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.Callable;
@@ -32,16 +31,10 @@ import lombok.extern.slf4j.Slf4j;
 @UtilityClass
 public class CryptoStrategyExecutor {
 
-    private static final String DEFAULT_FALLBACK_VALUE;
-    private static final Map<CryptoStrategy, CryptoFallbackValue> FALLBACK_VALUE_MAP = new HashMap<>();
+    private static final CryptoProperties CRYPTO_PROPERTIES;
 
     static {
-        CryptoProperties cryptoProperties = SpringUtil.getBean(CryptoProperties.class);
-        DEFAULT_FALLBACK_VALUE = cryptoProperties.getDefaultFallbackValue();
-        FALLBACK_VALUE_MAP.put(CryptoStrategy.AES, cryptoProperties.getAes().getFallbackValue());
-        FALLBACK_VALUE_MAP.put(CryptoStrategy.DES, cryptoProperties.getDes().getFallbackValue());
-        FALLBACK_VALUE_MAP.put(CryptoStrategy.RSA, cryptoProperties.getRsa().getFallbackValue());
-        FALLBACK_VALUE_MAP.put(CryptoStrategy.SM4, cryptoProperties.getSm4().getFallbackValue());
+        CRYPTO_PROPERTIES = SpringUtil.getBean(CryptoProperties.class);
     }
 
     /**
@@ -57,8 +50,12 @@ public class CryptoStrategyExecutor {
             return method.call();
         } catch (Exception e) {
             log.error("Execute {} with value[{}] error: {}", strategy, originalValue, e.getMessage(), e);
-            CryptoFallbackValue fallbackValue = FALLBACK_VALUE_MAP.get(strategy);
-            return Objects.nonNull(fallbackValue) ? fallbackValue.getValue(originalValue, e) : DEFAULT_FALLBACK_VALUE;
+            Map<CryptoStrategy, CryptoStrategyConfiguration> configurationMap = CRYPTO_PROPERTIES.getStrategy();
+
+            CryptoFallbackValue fallbackValue = configurationMap.get(strategy).getFallbackValue();
+            return Objects.nonNull(fallbackValue)
+                    ? fallbackValue.getValue(originalValue, e)
+                    : CRYPTO_PROPERTIES.getDefaultFallbackValue();
         }
     }
 }

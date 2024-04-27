@@ -16,19 +16,24 @@
 
 package com.lzhpo.crypto;
 
-import static com.lzhpo.crypto.strategy.CryptoFallbackValue.NULL_VALUE;
-
 import com.lzhpo.crypto.strategy.CryptoFallbackValue;
+import com.lzhpo.crypto.strategy.CryptoStrategy;
+import com.lzhpo.crypto.strategy.CryptoStrategyConfiguration;
+import java.util.EnumMap;
+import java.util.Map;
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.InitializingBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.context.properties.NestedConfigurationProperty;
+import org.springframework.util.ObjectUtils;
 
 /**
  * @author lzhpo
  */
 @Data
+@Slf4j
 @ConfigurationProperties(prefix = "crypto")
-public class CryptoProperties {
+public class CryptoProperties implements InitializingBean {
 
     /**
      * Will use default fallback value if not configure {@link CryptoFallbackValue}
@@ -36,51 +41,16 @@ public class CryptoProperties {
     private String defaultFallbackValue = "N/A";
 
     /**
-     * AES crypto configurations.
+     * Crypto strategy configurations
      */
-    @NestedConfigurationProperty
-    private CryptoAes aes = new CryptoAes();
+    private Map<CryptoStrategy, CryptoStrategyConfiguration> strategy = new EnumMap<>(CryptoStrategy.class);
 
-    /**
-     * DES crypto configurations.
-     */
-    @NestedConfigurationProperty
-    private CryptoDes des = new CryptoDes();
-
-    /**
-     * RSA crypto configurations.
-     */
-    @NestedConfigurationProperty
-    private CryptoRsa rsa = new CryptoRsa();
-
-    /**
-     * SM4 crypto configurations
-     */
-    @NestedConfigurationProperty
-    private CryptoSm4 sm4 = new CryptoSm4();
-
-    @Data
-    public static class CryptoAes {
-        private String key;
-        private CryptoFallbackValue fallbackValue = NULL_VALUE;
+    // spotless:off
+    @Override
+    public void afterPropertiesSet() {
+        if (ObjectUtils.isEmpty(strategy)) {
+            log.info("Not configure any crypto strategy, means you must provide strategy arguments manually in @Encrypt and @Decrypt.");
+        }
     }
-
-    @Data
-    public static class CryptoDes {
-        private String key;
-        private CryptoFallbackValue fallbackValue = NULL_VALUE;
-    }
-
-    @Data
-    public static class CryptoRsa {
-        private String privateKey;
-        private String publicKey;
-        private CryptoFallbackValue fallbackValue = NULL_VALUE;
-    }
-
-    @Data
-    public static class CryptoSm4 {
-        private String key;
-        private CryptoFallbackValue fallbackValue = NULL_VALUE;
-    }
+    // spotless:on
 }
