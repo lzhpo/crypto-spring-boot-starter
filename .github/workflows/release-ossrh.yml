@@ -17,20 +17,11 @@ jobs:
         with:
           java-version: '17'
           distribution: 'adopt'
-          # It needs to be the same as the id corresponding to the snapshot Repository in pom.xml
           server-id: ossrh
-          # env variable for username in deploy
-          server-username: MAVEN_USERNAME
-          # env variable for token in deploy
-          server-password: MAVEN_CENTRAL_TOKEN
-          # Value of the GPG private key to import
+          server-username: ${{ secrets.OSSRH_USERNAME }}
+          server-password: ${{ secrets.OSSRH_TOKEN }}
           gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-          # env variable for GPG private key passphrase
-          gpg-passphrase: MAVEN_GPG_PASSPHRASE
+          gpg-passphrase: ${{ secrets.GPG_PASSPHRASE }}
 
       - name: Release to Apache Maven Central
         run: mvn clean deploy -Prelease-ossrh
-        env:
-          MAVEN_USERNAME: ${{ secrets.OSSRH_USERNAME }}
-          MAVEN_CENTRAL_TOKEN: ${{ secrets.OSSRH_TOKEN }}
-          MAVEN_GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
