@@ -30,7 +30,7 @@ import lombok.extern.slf4j.Slf4j;
  */
 @Slf4j
 @UtilityClass
-public class CryptoExecutionHandler {
+public class CryptoStrategyExecutor {
 
     private static final String DEFAULT_FALLBACK_VALUE;
     private static final Map<CryptoStrategy, CryptoFallbackValue> FALLBACK_VALUE_MAP = new HashMap<>();
