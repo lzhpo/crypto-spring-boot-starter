@@ -129,10 +129,10 @@
     ```
    配置参数解释：
    - `fallback-value`：当加解密出现异常的时候需要做的事情。
-     - ORIGINAL_VALUE：返回原始值、
-     - NULL_VALUE：返回NULL值。
-     - EMPTY_STRING：返回空字符串。
-     - THROW_EXCEPTION：直接抛出异常。
+     - original_value：返回原始值。
+     - null_value：返回 null 值。
+     - empty_string：返回空字符串。
+     - throw_exception：直接抛出异常。
    - `default-fallback-value`：当加密策略没有配置 `fallback-value` 的时候，将会直接返回此处配置的值。
    - `arguments`：一般来说统一在yml中配置加解密的key就可以了，如果有字段需要单独使用其它key进行加解密，可以在此配置。
     ```java
